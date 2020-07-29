@@ -2,7 +2,7 @@ package setup
 
 import (
 	"fmt"
-	"github.com/Alvarios/kushuh-go-utils/ext-apis/slack"
+	"github.com/Alvarios/go-slack"
 	"github.com/Alvarios/watcher/utils"
 	"github.com/gin-gonic/gin"
 	"log"
