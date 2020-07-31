@@ -2,6 +2,10 @@
 
 A simple and efficient package to handle staging and production errors.
 
+```cgo
+go get -u github.com/Alvarios/watcher
+```
+
 ## Prerequisite
 
 You need a [Slack application](https://api.slack.com/apps) that supports [incoming webhooks](https://api.slack.com/messaging/webhooks#:~:text=Incoming%20Webhooks%20are%20a%20simple,make%20the%20messages%20stand%20out.).
