@@ -3,7 +3,7 @@
 A simple and efficient package to handle staging and production errors.
 
 ```cgo
-go get -u github.com/Alvarios/watcher
+go get github.com/Alvarios/watcher
 ```
 
 ## Prerequisite
