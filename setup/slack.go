@@ -52,7 +52,7 @@ func (sc *SlackConfig) Fatal(m string) {
 		nil,
 		[]map[string]interface{}{
 			{
-				"fallback" : fmt.Sprintf("Unexpected error in %s (%s)", sc.Application, sc.Environment),
+				"fallback" : fmt.Sprintf("Fatal error in %s (%s)", sc.Application, sc.Environment),
 				"color" : "#FF9300",
 				"text" : fm,
 			},
