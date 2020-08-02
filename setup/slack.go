@@ -28,7 +28,7 @@ func (sc *SlackConfig) Print(m string) string {
 func (sc *SlackConfig) Error(m string) (*http.Response, error) {
 	env := os.Getenv("ENV")
 	// If no ENV is specified, assume we are in development mode, so we don't want to flood Slack uselessly.
-	if env == "" {
+	if env == "" || env == "development" {
 		return nil, nil
 	}
 
@@ -51,7 +51,7 @@ func (sc *SlackConfig) Fatal(m string) {
 
 	env := os.Getenv("ENV")
 	// If no ENV is specified, assume we are in development mode, so we don't want to flood Slack uselessly.
-	if env == "" {
+	if env == "" || env == "development" {
 		log.Fatalf(fm)
 	}
 
