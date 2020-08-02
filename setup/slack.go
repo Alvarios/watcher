@@ -3,39 +3,42 @@ package setup
 import (
 	"fmt"
 	"github.com/Alvarios/go-slack"
-	"github.com/Alvarios/watcher/utils"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"os"
+	"runtime/debug"
 	"time"
 )
 
 type SlackConfig struct {
 	WebHook string
 	Application string
-	Environment string
 }
 
 func (sc *SlackConfig) Print(m string) string {
-	stack := utils.PrintStack(2)
-
 	return fmt.Sprintf(
-		"%s\n\n*File*\n%s\n\n*Environment*\n%s\n\n*Noticed*\n%s",
+		"*Message*\n%s\n\n*Stack*\n```%s```\n\n*Time*\n%s",
 		m,
-		stack,
-		sc.Environment,
+		string(debug.Stack()),
 		time.Now().Format("2006-01-02 3:4:5"),
 	)
 }
 
 func (sc *SlackConfig) Error(m string) (*http.Response, error) {
+	env := os.Getenv("ENV")
+	// If no ENV is specified, assume we are in development mode, so we don't want to flood Slack uselessly.
+	if env == "" {
+		return nil, nil
+	}
+
 	return slack.Send(
 		sc.WebHook,
-		fmt.Sprintf("Unexpected error in %s", sc.Application),
+		fmt.Sprintf("Unexpected error in %s (%s)", sc.Application, env),
 		nil,
 		[]map[string]interface{}{
 			{
-				"fallback" : fmt.Sprintf("Unexpected error in %s (%s)", sc.Application, sc.Environment),
+				"fallback" : fmt.Sprintf("Unexpected error in %s (%s)", sc.Application, env),
 				"color" : "#FF9300",
 				"text" : sc.Print(m),
 			},
@@ -46,14 +49,20 @@ func (sc *SlackConfig) Error(m string) (*http.Response, error) {
 func (sc *SlackConfig) Fatal(m string) {
 	fm := sc.Print(m)
 
+	env := os.Getenv("ENV")
+	// If no ENV is specified, assume we are in development mode, so we don't want to flood Slack uselessly.
+	if env == "" {
+		log.Fatalf(fm)
+	}
+
 	_, _ = slack.Send(
 		sc.WebHook,
-		fmt.Sprintf("Unexpected error in %s", sc.Application),
+		fmt.Sprintf("Unexpected error in %s (%s)", sc.Application, env),
 		nil,
 		[]map[string]interface{}{
 			{
-				"fallback" : fmt.Sprintf("Fatal error in %s (%s)", sc.Application, sc.Environment),
-				"color" : "#FF9300",
+				"fallback" : fmt.Sprintf("Fatal error in %s (%s)", sc.Application, env),
+				"color" : "#FF3232",
 				"text" : fm,
 			},
 		},

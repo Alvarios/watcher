@@ -25,7 +25,6 @@ func main() {
     Watcher := watcher.SlackConfig{
         WebHook: "https://hooks.slack.com/services/XXXXX/XXXXX/XXXXX",
         Application: "Your application name",
-        Environment: "Your environment",
     }
 }
 ```
