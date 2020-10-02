@@ -32,6 +32,8 @@ github.com/Alvarios/kushuh-go-utils v1.9.3 h1:nU4ZiKOb2qBEFYXzsXMei3bbxaZWHNi66Z
 github.com/Alvarios/kushuh-go-utils v1.9.3/go.mod h1:y2yME2WvoB6w48QqOx0cclVbUvz0g5NjP+F3K7UhkIc=
 github.com/Alvarios/poster v1.0.0 h1:b2ftKGJSKWfUP3Ye0H99hNGJ/ivQeT+Lm6ytYzQIiw8=
 github.com/Alvarios/poster v1.0.0/go.mod h1:7LQfeSOZNY02WU7FO0leBbaWuyDdoh98rX86VkGzg+U=
+github.com/Alvarios/s-os v1.1.0 h1:4Z1+2Pm8bA6XtwunVcjZwlSymplfoTXupRFZVGUcdz8=
+github.com/Alvarios/s-os v1.1.0/go.mod h1:xc7Iof8FaYrxiBIrUetUTv9CworFjfFZgNF+QCnubqo=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=

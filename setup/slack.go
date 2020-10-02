@@ -3,6 +3,7 @@ package setup
 import (
 	"fmt"
 	"github.com/Alvarios/go-slack"
+	soscrud "github.com/Alvarios/s-os/crud"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -12,8 +13,22 @@ import (
 )
 
 type SlackConfig struct {
-	WebHook string
-	Application string
+	WebHook     string `json:"webhook"`
+	Application string `json:"application"`
+}
+
+type extract struct {
+	Watcher SlackConfig `json:"watcher"`
+}
+
+func (sc *SlackConfig) LoadFrom(filePath string) error {
+	var data extract
+	err := soscrud.Get(filePath, &data)
+
+	sc.WebHook = data.Watcher.WebHook
+	sc.Application = data.Watcher.Application
+
+	return err
 }
 
 func (sc *SlackConfig) Print(m string) string {
@@ -38,9 +53,9 @@ func (sc *SlackConfig) Error(m string) (*http.Response, error) {
 		nil,
 		[]map[string]interface{}{
 			{
-				"fallback" : fmt.Sprintf("Unexpected error in %s (%s)", sc.Application, env),
-				"color" : "#FF9300",
-				"text" : sc.Print(m),
+				"fallback": fmt.Sprintf("Unexpected error in %s (%s)", sc.Application, env),
+				"color":    "#FF9300",
+				"text":     sc.Print(m),
 			},
 		},
 	)
@@ -61,9 +76,9 @@ func (sc *SlackConfig) Fatal(m string) {
 		nil,
 		[]map[string]interface{}{
 			{
-				"fallback" : fmt.Sprintf("Fatal error in %s (%s)", sc.Application, env),
-				"color" : "#FF3232",
-				"text" : fm,
+				"fallback": fmt.Sprintf("Fatal error in %s (%s)", sc.Application, env),
+				"color":    "#FF3232",
+				"text":     fm,
 			},
 		},
 	)
@@ -86,6 +101,6 @@ func (sc *SlackConfig) GinAbort(c *gin.Context, m string) {
 
 	c.AbortWithStatusJSON(
 		http.StatusInternalServerError,
-		gin.H{"message" : m},
+		gin.H{"message": m},
 	)
 }
