@@ -86,11 +86,30 @@ func (sc *SlackConfig) Fatal(m string) {
 	log.Fatalf(fm)
 }
 
-func (sc *SlackConfig) GinFormatter(param gin.LogFormatterParams, m string) string {
-	return fmt.Sprintf(
-		"*%s* -> <%s>\n\n```%s```\n\n",
+func (sc *SlackConfig) GinFormatter(param gin.LogFormatterParams) string {
+	_, _ = sc.Error(
+		fmt.Sprintf(
+			"*%s* %s [%v]\n\n```%s```\n\n",
+			param.Method,
+			param.Path,
+			param.StatusCode,
+			param.ErrorMessage,
+		),
+	)
+
+	return fmt.Sprintf("%s - [%s] \"%s %s %s %d %s \"%s\" %s\"\n",
+		param.ClientIP,
+		param.TimeStamp.Format(time.RFC1123),
 		param.Method,
 		param.Path,
-		m,
+		param.Request.Proto,
+		param.StatusCode,
+		param.Latency,
+		param.Request.UserAgent(),
+		param.ErrorMessage,
 	)
+}
+
+func (sc *SlackConfig) UseGinFormatter(router *gin.Engine) {
+	router.Use(gin.LoggerWithFormatter(sc.GinFormatter))
 }
