@@ -87,7 +87,7 @@ func (sc *SlackConfig) Fatal(m string) {
 }
 
 func (sc *SlackConfig) GinFormatter(param gin.LogFormatterParams) string {
-	_, _ = sc.Error(
+	_, err := sc.Error(
 		fmt.Sprintf(
 			"*%s* %s [%v]\n\n```%s```\n\n",
 			param.Method,
@@ -96,6 +96,10 @@ func (sc *SlackConfig) GinFormatter(param gin.LogFormatterParams) string {
 			param.ErrorMessage,
 		),
 	)
+
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 
 	return fmt.Sprintf("%s - [%s] \"%s %s %s %d %s \"%s\" %s\"\n",
 		param.ClientIP,
