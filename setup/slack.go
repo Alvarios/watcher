@@ -71,19 +71,21 @@ func (sc *SlackConfig) Fatal(m string) {
 	log.Fatalf(fm)
 }
 
-func (sc *SlackConfig) GinAbort(c *gin.Context, m string) {
-	fm := fmt.Sprintf(
+func (sc *SlackConfig) FormatForGin(c *gin.Context, m string) string {
+	return fmt.Sprintf(
 		"*%s* -> <http://%s%s>\n\n```%s```\n\n",
 		c.Request.Method,
 		c.Request.Host,
 		c.Request.URL.Path,
 		m,
 	)
+}
 
-	_, _ = sc.Error(fm)
+func (sc *SlackConfig) GinAbort(c *gin.Context, m string) {
+	_, _ = sc.Error(sc.FormatForGin(c, m))
 
 	c.AbortWithStatusJSON(
 		http.StatusInternalServerError,
-		gin.H{"message" : fm},
+		gin.H{"message" : m},
 	)
 }
