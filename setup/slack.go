@@ -86,21 +86,11 @@ func (sc *SlackConfig) Fatal(m string) {
 	log.Fatalf(fm)
 }
 
-func (sc *SlackConfig) FormatForGin(c *gin.Context, m string) string {
+func (sc *SlackConfig) GinFormatter(param gin.LogFormatterParams, m string) string {
 	return fmt.Sprintf(
-		"*%s* -> <http://%s%s>\n\n```%s```\n\n",
-		c.Request.Method,
-		c.Request.Host,
-		c.Request.URL.Path,
+		"*%s* -> <%s>\n\n```%s```\n\n",
+		param.Method,
+		param.Path,
 		m,
-	)
-}
-
-func (sc *SlackConfig) GinAbort(c *gin.Context, m string) {
-	_, _ = sc.Error(sc.FormatForGin(c, m))
-
-	c.AbortWithStatusJSON(
-		http.StatusInternalServerError,
-		gin.H{"message": m},
 	)
 }
